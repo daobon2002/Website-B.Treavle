@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="homelink/head.html :: head">
+    <style>
+        .properties-filter a {
+            color: black;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        .properties-filter a.is_active {
+            color: white;
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="homelink/body.html:: body"></div>
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="breadcrumb"><a href="/home">Trang chủ</a> / Du lịch</span>
+                <h4 style="font-style:oblique;font-size: 50px ;color: white">Phiêu lưu, khám phá,thư giãn</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<form style="margin-top: 50px; display: flex; justify-content: center; align-items: center;">
+    <div class="search-box me-2" style="flex-grow: 1; max-width: 45%;">
+        <input type="text" id="searchInput" name="keyword" onkeyup="searchUsers()" placeholder="Tìm kiếm tour..."
+               th:value="${keyword}" class="form-control"
+               style="border-radius: 20px; border: 1px solid gray; width: 100%; height: 55px;">
+    </div>
+    <button type="submit" class="btn btn-outline-linkedin btn-search"
+            style="flex-grow: 0; margin-left: 10px; border-radius: 13px; padding: 15px 20px; background-color: #333332; color: white; border: 1px solid #000000;"
+            onmouseover="this.style.backgroundColor='#F66F46'; this.style.border='1px solid orange';"
+            onmouseout="this.style.backgroundColor='#333332'; this.style.border='1px solid #000000';"
+            onmousedown="this.style.backgroundColor='#F66F46'; this.style.border='1px solid orange';"
+            onmouseup="this.style.backgroundColor='#333332'; this.style.border='1px solid #000000';">
+        <i class="fas fa-search"></i>
+    </button>
+
+
+</form>
+
+<div class="section properties">
+    <div class="container">
+        <ul class="properties-filter">
+            <li>
+                <a  href="/home/tour" data-filter="*">Tất cả</a>
+            </li>
+            <li th:each="category : ${categories}">
+                <a th:href="@{/home/tour(categoryid=${category.id})}" data-filter=".adv" th:text="${category.tentheloai}"></a>
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-lg-4 col-md-6" th:each="tour : ${tour}">
+                <div class="item">
+                    <a th:href="@{/home/tour/tour_details(tourId=${tour.id})}">
+                        <img  th:src="@{'/static/image/'+${tour.image}}" th:alt="..." style="width:100%; height: 250px; object-fit: cover; border-radius: 10%;">
+                    </a>
+                    <h4>
+                        <a th:href="@{/home/tour/tour_details(tourid=${tour.id})}" th:text="${tour.tentour}"></a>
+                    </h4>
+
+                    <ul>
+                        <li>Giá:<span style="color:#fd7e14;font-size: 20px;font-weight: 600" th:text="${'   '+tour.gia}+' VND'"></span></li><br>
+                        <li>Khởi hành: <span th:text="${tour.ngaykhoihanh}"></span></li>
+                        <li>Thời gian: <span th:text="${tour.soday} + 'Ngày ' + (${tour.soday} - 1) + 'Đêm'"></span><br>
+                        <li>Địa điểm: <span th:text="${tour.diadiem}"></span></li>
+                        <li>Ưu đãi:
+                            <span style="color: red" th:text="${tour.uudai != null ? tour.uudai + '%' : '0%'}"></span>
+                        </li>
+                        <li>Phương tiện:
+                            <span>
+                                <i th:if="${tour.phuongtien == 'Máy bay'}" class="fa-solid fa-plane"></i>
+                                <i th:if="${tour.phuongtien == 'Ô tô'}" class="fa-solid fa-car"></i>
+                                <i th:if="${tour.phuongtien == 'Tàu Hỏa'}" class="fa-solid fa-train"></i>
+                                <i th:if="${tour.phuongtien == 'Tàu thủy'}" class="fa-solid fa-ship"></i>
+                            </span>
+                        </li>
+                    </ul>
+                    <div class="main-button">
+                        <a th:href="@{/home/tour/tour_details(tourid=${tour.id})}">Đặt ngay</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:if="${currentPage > 1}">
+                            <a class="page-link" th:href="@{'?pageNumber=' + ${currentPage - 1}}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1, totalPage)}"
+                            th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                            <a class="page-link" th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'pageNumber=' + ${i}}" th:text="${i}"></a>
+                        </li>
+                        <li class="page-item" th:if="${currentPage < totalPage}">
+                            <a class="page-link" th:href="@{'?pageNumber=' + ${currentPage + 1}}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <style>
+            .pagination .page-item .page-link {
+                border-radius: 50%; /* Bo tròn các góc */
+                background-color: #333; /* Màu nền cho ô */
+                color: white; /* Màu chữ */
+                display: flex; /* Sử dụng flexbox */
+                align-items: center; /* Căn giữa theo chiều dọc */
+                justify-content: center; /* Căn giữa theo chiều ngang */
+                height: 40px; /* Chiều cao ô */
+                width: 40px; /* Chiều rộng ô */
+            }
+
+            .pagination .page-item.active .page-link {
+                background-color: #fd7e14; /* Màu nền cho ô đang hoạt động */
+                color: white; /* Màu chữ khi active */
+                border: 1px solid #fd7e14; /* Đường viền cho ô đang hoạt động */
+            }
+
+            .pagination .page-item.disabled .page-link {
+                background-color: #ccc; /* Màu nền cho ô không hoạt động */
+                color: #666; /* Màu chữ cho ô không hoạt động */
+            }
+
+            .pagination .page-item .page-link:hover {
+                background-color: #fd7e14; /* Màu nền khi hover */
+                color: white; /* Màu chữ khi hover */
+            }
+        </style>
+        </div>
+    </div>
+</div>
+<body th:replace="homelink/mess.html::body"></body>
+
+<footer th:replace="homelink/footer.html :: footer"></footer>
+
+<!-- Scripts -->
+<!-- Bootstrap core JavaScript -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/counter.js"></script>
+<script src="assets/js/custom.js"></script>
+<script>
+    document.querySelectorAll('.properties-filter a').forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            document.querySelectorAll('.properties-filter a').forEach(a => a.classList.remove('is_active'));
+            this.classList.add('is_active');
+            window.location.href = this.href;
+        });
+    });
+
+    // Set active class based on current URL
+    document.addEventListener('DOMContentLoaded', function() {
+        var currentUrl = window.location.href;
+        document.querySelectorAll('.properties-filter a').forEach(link => {
+            if (link.href === currentUrl) {
+                link.classList.add('is_active');
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

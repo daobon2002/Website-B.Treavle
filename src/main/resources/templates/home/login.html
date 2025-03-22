@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="link/head :: head"></head>
+<body>
+<div class="container-scroller">
+  <div class="container-fluid page-body-wrapper full-page-wrapper">
+    <div class="content-wrapper d-flex align-items-center auth" style="background:#F2E4E0;">
+      <div class="row flex-grow">
+        <div class="col-lg-4 mx-auto">
+          <div class="auth-form-light text-left p-5">
+            <h3>Xin chào</h3>
+            <h5 class="fw-light">Đăng nhập để tiếp tục.</h5>
+
+            <form class="pt-3" th:action="@{/home/login}" method="post" th:object="${userDto}">
+              <input type="hidden" name="redirectTourId" th:value="${param.redirectTourId}"/>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input style="border-color: #2b3035; border-radius: 10px;" type="text" class="form-control form-control-lg" id="username" th:field="*{username}" placeholder="Username" required>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input style="border-color: #2b3035; border-radius: 10px;" type="password" class="form-control form-control-lg" id="password" th:field="*{password}" placeholder="Password" required>
+              </div>
+
+              <div class="mt-3 d-grid gap-2">
+                <button class="btn btn-block btn-primary btn-lg fw-semibold auth-form-btn" type="submit">Đăng nhập</button>
+              </div>
+            </form>
+            <div class="mt-4 text-center">
+              <p>Bạn chưa có tài khoản? <a href="/home/register" style="color: #2b3035; font-weight: bold;">Đăng ký ngay</a></p>
+            </div>
+            <!-- Thông báo lỗi -->
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+              <p th:text="${error}"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- content-wrapper ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+<!-- endinject -->
+</body>
+</html>

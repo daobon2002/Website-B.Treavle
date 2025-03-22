@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="homelink/head.html :: head">
+    <style>
+        /* Thêm CSS nếu cần */
+    </style>
+</head>
+<body>
+
+<div th:replace="homelink/body.html:: body"></div>
+
+<div class="contact-page section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div><h4 class="text-center" style="color:#FAA573">Liên hệ tư vấn viên</h4></div>
+                <div class="text-center"style="margin-top: 40px">
+                    <div style="border: 1px solid #808080;width: 100%;height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                        <p><strong>Ms. Nghiệp (Tour Đoàn)</strong></p>
+                        <p><a href="tel:0935343174" class="phone">0935 343 174</a></p>
+                    </div>
+                    <div style="border: 1px solid #808080;width: 100%;height: 100px; border-radius: 5px;margin-bottom: 10px;">
+                        <p><strong>Ms. Chang Thanh</strong></p>
+                        <p><a href="tel:0933283164" class="phone">0933 283 164</a></p>
+                    </div>
+                    <div style="border: 1px solid #808080;width: 100%;height: 100px; border-radius: 5px; margin-bottom: 10px;">
+                        <p><strong>Ms. Phương Quỳnh</strong></p>
+                        <p><a href="tel:0931119254" class="phone">0931 119 254</a></p>
+                    </div>
+                    <div style="border: 1px solid #808080;width: 100%;height: 100px; border-radius: 5px;margin-bottom: 10px;">
+                        <p><strong>Ms. Bảo Anh</strong></p>
+                        <p><a href="tel:0901966194" class="phone">0901 966 194</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="section-heading">
+                    <h4 style="color:#FAA573">Điền thông tin cá nhân</h4>
+                </div>
+                <form id="contact-form" action="/saveBooking" method="post">
+                    <div class="col-lg-5">
+                        <label for="nametour">Ảnh Tour:</label>
+                        <img th:src="@{'/static/image/'+${tour.image}}" th:alt="..." style="width:100%; height: 100%; object-fit: cover; border-radius: 2%;">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <label for="nametour">Tên tour:</label>
+                                <input type="text" th:value="${tour.tentour}" id="nametour" name="tentour">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="name">Họ và Tên:</label>
+                                <input type="text" name="hoten" id="name" placeholder="Họ tên..." autocomplete="on" required>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="email">Email:</label>
+                                <input type="email" name="gmail" id="email" placeholder="E-mail..." required>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="phone">Số điện thoại:</label>
+                                <input type="text" name="sodienthoai" id="phone" placeholder="Số điện thoại..." required>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <fieldset>
+                                <label for="soluong">Số lượng khách:</label>
+                                <input type="number" name="soluong" id="soluong" placeholder="Số lượng khách..." oninput="calculateTotal()" required>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-3">
+                            <fieldset>
+                                <label for="tien">Giá tiền:</label>
+                                <input type="text" th:value="${tour.gia}" name="sotien" id="tien" autocomplete="on" readonly>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-9">
+                            <fieldset>
+                                <label for="ngaydat">Ngày đặt:</label>
+                                <input type="text" name="ngaythanhtoan" id="ngaydat" placeholder="Ngày đặt..." required>
+                            </fieldset>
+                            <script>
+                                // Lấy ngày và giờ hiện tại
+                                const today = new Date();
+
+                                const dd = String(today.getDate()).padStart(2, '0');
+                                const mm = String(today.getMonth() + 1).padStart(2, '0'); // Tháng 1-12
+                                const yyyy = today.getFullYear();
+
+                                const hours = String(today.getHours()).padStart(2, '0'); // Giờ
+                                const minutes = String(today.getMinutes()).padStart(2, '0'); // Phút
+                                const seconds = String(today.getSeconds()).padStart(2, '0'); // Giây
+
+                                // Tạo chuỗi định dạng cho ngày và giờ
+                                const currentDateTime = `${yyyy}-${mm}-${dd} ${hours}:${minutes}:${seconds}`;
+
+                                // Gán giá trị cho ô nhập liệu
+                                document.getElementById('ngaydat').value = currentDateTime;
+                            </script>
+                            <script>
+                                function calculateTotal() {
+                                    // Lấy giá tiền từ ô nhập liệu và loại bỏ dấu phẩy
+                                    var giaTien = parseFloat(document.getElementById('tien').value.replace(/,/g, ''));
+
+                                    // Lấy số lượng và kiểm tra hợp lệ
+                                    var soLuong = parseInt(document.getElementById('soluong').value) || 0;
+
+                                    // Kiểm tra các điều kiện
+                                    if (!isNaN(giaTien) && soLuong > 0) {
+                                        var tongTien = giaTien * soLuong;
+                                        document.getElementById('tien').value = formatCurrency(tongTien); // Hiển thị tổng tiền
+                                    } else {
+                                        // Nếu giá tiền không hợp lệ, hiển thị một thông báo và giữ giá trị gốc
+                                        document.getElementById('tien').value = formatCurrency(giaTien || 0); // Đặt về 0 nếu không hợp lệ
+                                        alert("Vui lòng nhập số lượng hợp lệ và giá tiền!");
+                                    }
+                                }
+
+                                // Hàm định dạng số thành tiền tệ
+                                function formatCurrency(number) {
+                                    if (isNaN(number)) return "0"; // Trả về 0 nếu không phải số
+                                    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                }
+                            </script>
+                        </div>
+                        <div class="col-lg-12">
+                            <fieldset>
+                                <button type="button" id="form-submit" class="orange-button">TIẾP TỤC</button>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirmation-dialog1" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background-color: white; border: 1px solid #ccc; padding: 20px; border-radius: 5px; text-align: center;">
+    <button type="button" id="close-button" style="position: absolute; top: 10px; right: 10px; border: none; background: none; font-size: 25px; cursor: pointer;">&times;</button>
+    <p><strong>Tất cả thông tin của bạn đều đã chính xác?</strong></p>
+    <p>Bạn sẽ không thể thay đổi thông tin sau khi tiến hành thanh toán. Bạn có muốn tiếp tục?</p>
+    <button type="button" id="continue-button" class="btn btn-primary">Tiếp tục</button>
+</div>
+<style>
+    /* Các kiểu khác nếu cần */
+    #close-button {
+        color: black; /* Màu mặc định */
+        transition: color 0.3s; /* Hiệu ứng chuyển đổi màu */
+    }
+
+    #close-button:hover {
+        color: red; /* Màu khi di chuyển chuột qua */
+    }
+</style>
+<script>
+    document.getElementById('form-submit').addEventListener('click', function () {
+        // Hiện hộp thoại xác nhận
+        document.getElementById('confirmation-dialog1').style.display = 'block';
+    });
+
+    document.getElementById('continue-button').addEventListener('click', function () {
+        // Gửi biểu mẫu khi nhấn "Tiếp tục"
+        document.getElementById('contact-form').submit();
+    });
+
+    // Thêm sự kiện cho nút "X"
+    document.getElementById('close-button').addEventListener('click', function () {
+        // Ẩn hộp thoại xác nhận khi nhấn "X"
+        document.getElementById('confirmation-dialog1').style.display = 'none';
+    });
+    document.getElementById('continue-button').addEventListener('click', function () {
+        const form = document.getElementById('contact-form');
+        const formData = new FormData(form);
+
+        fetch('/sendEmail', {
+            method: 'POST',
+            body: JSON.stringify(Object.fromEntries(formData)),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Email đã được gửi thành công!");
+                    form.submit(); // Tiếp tục gửi biểu mẫu
+                } else {
+                    alert("Có lỗi xảy ra khi gửi email.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>
+
+
+<body th:replace="homelink/mess.html::body"></body>
+<footer th:replace="homelink/footer.html :: footer"></footer>
+
+<!-- Scripts -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/counter.js"></script>
+<script src="assets/js/custom.js"></script>
+
+</body>
+</html>

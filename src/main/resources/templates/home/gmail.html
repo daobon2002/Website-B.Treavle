@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xác Nhận Đơn Hàng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f9f9f9;
+    }
+    .container {
+      text-align: center;
+      max-width: 800px;
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .highlight {
+      color: red;
+      font-style: italic;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      color: #fff;
+      background-color: #d9534f;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .btn:hover {
+      background-color: #c9302c;
+    }
+    p {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Cảm ơn bạn đã đặt tour!</h1>
+  <p>Chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất.</p>
+  <h2>Xác Nhận Đơn Hàng</h2>
+  <p><strong>Tên Công Ty:</strong> Công Ty Cổ Phần B.Travel</p>
+  <p><strong>Khách Hàng:</strong> <span th:text="${hoten}"></span></p>
+  <p><strong>Ngày Đặt Hàng:</strong> <span th:text="${ngaythanhtoan}"></span></p>
+  <p><strong>Ngân Hàng:</strong> Ngân hàng TMCP Quân Đội/MB BANK</p>
+  <p><strong>Số Tài Khoản:</strong> 1549122052002</p>
+  <p><strong>Nội Dung Chuyển Khoản:</strong> <span th:text="${id} + '_' + ${hoten} + '_' + ${sodienthoai}"></span></p>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Tên Tour</th>
+      <th>Giá</th>
+      <th>Số Lượng</th>
+      <th>Tổng</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td style="word-wrap: break-word; white-space: normal; max-width: 150px;" th:text="${tentour}"></td>
+      <td th:text="${sotien} + ' VND'"></td>
+      <td th:text="${soluong}"></td>
+      <td th:text="${sotien} + ' VND'"></td>
+    </tr>
+    <tr>
+      <td colspan="3"><strong>Tổng Cộng</strong></td>
+      <td><strong th:text="${sotien} + ' VND'"></strong></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p>Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất có thể.</p>
+  <p class="highlight">! Lưu ý: Vui lòng ghi chính xác nội dung chuyển khoản. Sai thông tin, chúng tôi không chịu trách nhiệm.</p>
+  <p>Sau khi hoàn tất việc thanh toán, quý khách vui lòng vào bước xác nhận.</p>
+
+  <button type="button" id="form-submit" class="btn">TÔI ĐÃ HOÀN THÀNH THANH TOÁN</button>
+</div>
+</body>
+</html>

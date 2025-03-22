@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="link/head :: head">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .truncate {
+            white-space: nowrap; /* Không cho xuống dòng */
+            overflow: hidden; /* Ẩn nội dung vượt quá không gian */
+            text-overflow: ellipsis; /* Hiển thị dấu "..." khi nội dung bị cắt */
+            max-width: 100px; /* Giới hạn chiều rộng tối đa */
+        }
+    </style>
+</head>
+<body>
+<div class="container-scroller">
+    <nav th:replace="link/nav :: nav"></nav>
+    <div class="container-fluid page-body-wrapper">
+        <nav th:replace="link/nav1 :: nav"></nav>
+        <div class="main-panel">
+            <div class="content-wrapper pb-0">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 25px">Thông Tin Tour</h1>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <form class="d-flex">
+                                    <div class="search-box me-2"
+                                         style="flex-grow: 1; margin-right: 10px; max-width: 350px;">
+                                        <input type="text" id="searchInput" name="keyword" onkeyup="searchTours()"
+                                               placeholder="Tìm kiếm..." th:value="${keyword}" class="form-control"
+                                               style="border-radius: 20px; border: 2px solid #0a53be;">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-linkedin btn-search"
+                                            style="flex-grow: 0; margin-left: 10px; padding: 5px 10px; border-radius: 13px;">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                                <button class="btn btn-success">
+                                    <a href="/admin/tour/create" style="color: white; text-decoration: none;">Thêm
+                                        Tour</a>
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="tourTable">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã Tour</th>
+                                        <th>Tên Tour</th>
+                                        <th>Ảnh Tour</th>
+                                        <th>Mô tả</th>
+                                        <th>Giá</th>
+                                        <th>Loại Tour</th>
+                                        <th>Phương tiện</th>
+                                        <th class="truncate">Lịch Trình</th>
+                                        <th>Số ngày đi</th>
+                                        <th>Địa điểm xuất phát</th>
+                                        <th>Số lượng ghế</th>
+                                        <th>Ưu đãi</th>
+                                        <th>Ngày khởi hành</th>
+                                        <th>Hành Động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="tour, stat : ${tour}">
+                                        <td th:text="${stat.index + 1}"></td>
+                                        <td th:text="${tour.id}"></td>
+                                        <td th:text="${tour.tentour}"></td>
+                                        <td>
+                                            <img th:src="@{'/static/image/'+${tour.image}}" th:alt="..." style="width:150px; height: 100px; object-fit: cover; border-radius: 10%;">
+                                        <td class="text-wrap" >
+                                            <p class="custom-select"
+                                               th:text="${tour.mota}">
+                                            </p>
+                                        </td>
+                                        <td th:text="${tour.gia}"></td>
+                                        <td th:text="${tour.category != null} ? ${tour.category.tentheloai} : 'N/A'"></td>
+                                        <td th:text="${tour.phuongtien}"></td>
+                                        <td th:utext="${tour.lichtrinh}"></td>
+                                        <td>
+                                            <span th:text="${tour.soday} + ' Ngày ' + (${tour.soday} - 1) + ' Đêm'"></span>
+                                        </td>
+                                        <td th:text="${tour.diadiem}"></td>
+                                        <td th:text="${tour.soluongghe}"></td>
+                                        <td th:text="${tour.uudai}"></td>
+                                        <td th:text="${tour.ngaykhoihanh}"></td>
+
+                                        <td class="text-center text-nowrap">
+                                            <a class="btn btn-behance me-2" th:href="@{/admin/tour/update/{id}(id=${tour.id})}" role="button">Sửa</a>
+                                            <form th:action="@{/admin/tour/delete/{id}(id=${tour.id})}" method="post" style="display:inline;">
+                                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                                <button type="submit" class="btn btn-danger me-2" onclick="return confirm('Bạn có muốn xóa tour này không?');">Xóa</button>
+                                            </form>
+                                        </td>
+                                        <style>
+                                            .custom-select {
+                                                width: 600px; /* Tăng chiều rộng */
+                                                font-size: 14px; /* Tăng kích cỡ chữ */
+                                            }
+                                        </style>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+                                <ul class="pagination">
+                                    <li class="page-item" th:if="${currentPage > 1}">
+                                        <a class="page-link" th:href="@{'?pageNumber=' + ${currentPage - 1}}">Trước</a>
+                                    </li>
+                                    <li th:each="i : ${#numbers.sequence(1, totalPage)}" th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                        <a class="page-link" th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'pageNumber=' + ${i}}" th:text="${i}"></a>
+                                    </li>
+                                    <li class="page-item" th:if="${currentPage < totalPage}">
+                                        <a class="page-link" th:href="@{'?pageNumber=' + ${currentPage + 1}}">Sau</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    function searchTours() {
+                        const input = document.getElementById('searchInput');
+                        const filter = input.value.toLowerCase();
+                        const table = document.getElementById('tourTable');
+                        const tr = table.getElementsByTagName('tr');
+
+                        for (let i = 1; i < tr.length; i++) { // Bắt đầu từ 1 để bỏ qua header
+                            const td = tr[i].getElementsByTagName('td');
+                            let shouldDisplay = false;
+                            for (let j = 0; j < td.length; j++) {
+                                if (td[j]) {
+                                    const txtValue = td[j].textContent || td[j].innerText;
+                                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                                        shouldDisplay = true;
+                                    }
+                                }
+                            }
+                            tr[i].style.display = shouldDisplay ? "" : "none";
+                        }
+                    }
+                </script>
+            </div>
+            <footer th:replace="link/footer :: footer"></footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>

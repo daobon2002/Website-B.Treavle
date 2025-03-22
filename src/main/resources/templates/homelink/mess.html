@@ -1,0 +1,40 @@
+<body>
+<div class="contact-toolbar">
+    <a href="https://www.messenger.com/" target="_blank" class="contact-icon">
+        <img src="/static/home/assets/images/Facebook_Messenger_logo_2020.svg.png" alt="Messenger">
+    </a>
+    <a href="https://zalo.me/" target="_blank" class="contact-icon">
+        <img src="/static/home/assets/images/Icon_of_Zalo.svg.jpg" alt="Zalo">
+    </a>
+    <a href="mailto:example@example.com" class="contact-icon">
+        <img src="/static/home/assets/images/tin%20nhắn.jpg" alt="Email">
+    </a>
+</div>
+<style>
+    .contact-toolbar {
+        position: fixed; /* Cố định vị trí */
+        right: 20px; /* Khoảng cách từ bên phải */
+        bottom: 20px; /* Khoảng cách từ dưới lên */
+        display: flex; /* Hiển thị các icon theo hàng dọc */
+        flex-direction: column; /* Đặt các icon thành cột */
+        gap: 10px; /* Khoảng cách giữa các icon */
+        z-index: 1000; /* Đảm bảo nằm trên các phần tử khác */
+    }
+
+    .contact-icon {
+        background-color: white; /* Nền trắng cho icon */
+        border-radius: 50%; /* Bo tròn */
+        padding: 10px; /* Đệm cho icon */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+        transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+    }
+
+    .contact-icon img {
+        width: 40px; /* Kích thước icon */
+        height: 40px; /* Kích thước icon */
+    }
+
+    .contact-icon:hover {
+        background-color: #f0f0f0; /* Màu nền khi hover */
+    }</style>
+</body>

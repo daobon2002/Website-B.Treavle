@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="link/head :: head">
+</head>
+<body>
+<div class="container-scroller">
+    <nav th:replace="link/nav :: nav"></nav>
+    <div class="container-fluid page-body-wrapper">
+        <nav th:replace="link/nav1 :: nav"></nav>
+        <div class="main-panel">
+            <div class="content-wrapper pb-0">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 25px">Tin Tức</h1>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <form class="d-flex">
+                                    <div class="search-box me-2" style="flex-grow: 1; margin-right: 10px; max-width: 350px;">
+                                        <input type="text" id="searchInput" name="keyword" placeholder="Tìm kiếm..." class="form-control" style="border-radius: 20px; border: 2px solid #0a53be;">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-linkedin btn-search" style="flex-grow: 0; margin-left: 10px; padding: 5px 10px; border-radius: 13px;">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                                <button class="btn btn-success">
+                                    <a href="/admin/news/create" style="color: white; text-decoration: none;">Thêm Tin Tức</a>
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="newsTable">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Id tin tuc</th>
+                                        <th>Tiêu Đề</th>
+                                        <th>Nội dung</th>
+                                        <th>Tác Giả</th>
+                                        <th>Ngày Xuất Bản</th>
+                                        <th>Ảnh</th>
+                                        <th>Hành Động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="news, stat : ${news}">
+                                        <td th:text="${stat.index + 1}"></td>
+                                        <td th:text="${news.id}"></td>
+                                        <td th:text="${news.tieude}"></td>
+                                        <td class="text-wrap" >
+                                            <p class="custom-select"
+                                                    th:utext="${news.noidung}">
+                                            </p>
+                                        </td>
+                                        <td th:text="${news.author}"></td>
+                                        <td th:text="${news.ngaydang}"></td>
+                                        <td>
+                                            <img th:src="@{'/static/image/'+${news.image}}" th:alt="..." style="width:150px; height: 100px; object-fit: cover; border-radius: 10%;">
+                                        </td>
+                                        <td class="text-center text-nowrap">
+                                            <a class="btn btn-behance me-2" th:href="@{/admin/news/update(id=${news.id})}" role="button">Sửa</a>
+                                            <form th:action="@{/admin/news/delete(id=${news.id})}" method="post" style="display:inline;">
+                                                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                                                <button type="submit" class="btn btn-danger me-2" onclick="return confirm('Bạn có muốn xóa tin tức này không?');">Xóa</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+
+                                </table>
+                                <style>
+                                     .custom-select {
+                                           width: 500px; /* Tăng chiều rộng */
+                                           font-size: 18px; /* Tăng kích cỡ chữ */
+                                       }
+
+
+                                </style>
+                            </div>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item" th:if="${currentPage > 1}">
+                                        <a class="page-link" href="#" th:href="@{'?pageNumber=' + ${currentPage - 1}}">Trước</a>
+                                    </li>
+                                    <li th:each="i : ${#numbers.sequence(1, totalPage)}" th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                                        <a th:href="@{${keyword!=null && keyword !=''? '?keyword='+keyword+'&':'?'}+'pageNumber=' + ${i}}" class="page-link" th:text="${i}"></a>
+                                    </li>
+                                    <li class="page-item" th:if="${currentPage < totalPage}">
+                                        <a class="page-link" href="#" th:href="@{'?pageNumber=' + ${currentPage + 1}}">Sau</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="link/footer :: footer"></footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>

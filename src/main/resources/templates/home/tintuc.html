@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="homelink/head.html :: head">
+    <style>
+        .card-body {
+            display: flex; /* Sử dụng Flexbox cho card-body */
+            align-items: flex-start; /* Căn chỉnh các phần tử theo chiều dọc */
+        }
+
+        .card-title {
+            margin: 0; /* Xóa margin mặc định */
+        }
+
+        .card-text {
+            margin: 10px 0; /* Thêm khoảng cách cho đoạn văn */
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="homelink/body.html:: body"></div>
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="breadcrumb"><a href="#">Trang chủ</a>  /  Tin tức</span>
+                <h4 style="font-style:oblique;font-size: 50px ;color: white">Cẩm nang du lịch</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="news-section section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9" >
+                <!-- Bài viết tin tức -->
+                <div class="news-item card" style="margin-top: 10px;margin-bottom: 10px" th:each="news:${news}">
+                    <div class="card-body d-flex align-items-start">
+                        <div>
+                            <img style="width: 200px; height: 150px; margin-right: 15px;border-radius: 10px" th:src="@{'/static/image/'+${news.image}}" th:alt="...">
+                        </div>
+
+                        <div>
+                            <h5 class="card-title" th:text="${news.tieude}"></h5>
+                            <p class="card-text" th:utext="${news.noidung}"></p>
+                            <p th:text="'Tác giả: '+${news.author}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <h4 class="text-center">Liên hệ tư vấn viên</h4>
+                <i style="color: red">!Chú ý chỉ gọi vào giờ hành chính. Mọi cuộc gọi sau giờ hành chính chúng tôi xin
+                    phép không trả lời.</i>
+                <div class="consultants text-center">
+                    <div style="border: 1px solid #808080; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                        <p><strong>Ms. Nghiệp (Tour Đoàn)</strong></p>
+                        <p><a href="tel:0935343174" class="phone">0935 343 174</a></p>
+                    </div>
+                    <div style="border: 1px solid #808080; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                        <p><strong>Ms. Chang Thanh</strong></p>
+                        <p><a href="tel:0933283164" class="phone">0933 283 164</a></p>
+                    </div>
+                    <div style="border: 1px solid #808080; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                        <p><strong>Ms. Phương Quỳnh</strong></p>
+                        <p><a href="tel:0931119254" class="phone">0931 119 254</a></p>
+                    </div>
+                    <div style="border: 1px solid #808080; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                        <p><strong>Ms. Bảo Anh</strong></p>
+                        <p><a href="tel:0901966194" class="phone">0901 966 194</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:if="${currentPage > 1}">
+                    <a class="page-link" href="#" th:href="@{'?pageNumber=' + ${currentPage - 1}}">Trước</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(1, totalPage)}" th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                    <a th:href="@{${keyword!=null && keyword !=''? '?keyword='+keyword+'&':'?'}+'pageNumber=' + ${i}}" class="page-link" th:text="${i}"></a>
+                </li>
+                <li class="page-item" th:if="${currentPage < totalPage}">
+                    <a class="page-link" href="#" th:href="@{'?pageNumber=' + ${currentPage + 1}}">Sau</a>
+                </li>
+            </ul>
+        </nav>
+<!--        <nav style="margin-left: 40%; margin-top: 20px" aria-label="Page navigation example">-->
+<!--            <ul  class="pagination">-->
+<!--                <li class="page-item">-->
+<!--                    <a class="page-link" th:href="@{(currentPage-1)}" aria-label="Previous">-->
+<!--                        <span aria-hidden="true">&laquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}">-->
+<!--                    <a class="page-link" th:href="@{(i)}" th:text="${i+1}"></a>-->
+<!--                </li>-->
+<!--                <li class="page-item">-->
+<!--                    <a class="page-link" th:href="@{(currentPage+1)}" aria-label="Next">-->
+<!--                        <span aria-hidden="true">&raquo;</span>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </nav>-->
+
+    </div>
+</div>
+<body th:replace="homelink/mess.html::body"></body>
+
+<footer th:replace="homelink/footer.html :: footer"></footer>
+
+<!-- Scripts -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/counter.js"></script>
+<script src="assets/js/custom.js"></script>
+
+</body>
+</html>

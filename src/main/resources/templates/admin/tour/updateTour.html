@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thêm Tour Mới</title>
+    <head th:replace="link/head :: head"></head>
+    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+</head>
+<body>
+<div class="container-scroller">
+    <nav th:replace="link/nav :: nav"></nav>
+    <div class="container-fluid page-body-wrapper">
+        <nav th:replace="link/nav1 :: nav"></nav>
+        <div class="main-panel">
+            <div class="content-wrapper pb-0">
+                <div class="container">
+                    <h2>Thêm Tour Mới</h2>
+                    <form th:action="@{/admin/tour/update}" th:object="${tour}" method="post" enctype="multipart/form-data">
+                        <div class="form-row">
+                            <input type="hidden" th:field="*{id}"/> <!-- Thêm ID để xác định tour -->
+                            <div class="form-group col-md-9">
+                                <label for="tentour">Tên Tour</label>
+                                <input type="text" class="form-control" id="tentour" th:field="*{tentour}">
+                                <label th:if="${#fields.hasErrors('tentour')}" th:errors="*{tentour}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="mota">Mô Tả</label>
+                                <textarea class="form-control" id="mota" th:field="*{mota}"></textarea>
+                                <label th:if="${#fields.hasErrors('mota')}" th:errors="*{mota}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="gia">Giá</label>
+                                <input type="text" class="form-control" id="gia" th:field="*{gia}">
+                                <label th:if="${#fields.hasErrors('gia')}" th:errors="*{gia}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="ngaykhoihanh">Ngày Khởi Hành</label>
+                                <input type="datetime-local" class="form-control" id="ngaykhoihanh" th:field="*{ngaykhoihanh}">
+                                <label th:if="${#fields.hasErrors('ngaykhoihanh')}" th:errors="*{ngaykhoihanh}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="loaitour">Loại Tour</label>
+                                <select class="form-control" id="loaitour" th:field="*{loaitourId}">
+                                    <option value="" disabled selected>Chọn loại tour</option>
+                                    <option th:each="type : ${loaiTours}" th:value="${type.id}" th:text="${type.tentheloai}"></option>
+                                </select>
+                                <label th:if="${#fields.hasErrors('loaitourId')}" th:errors="*{loaitourId}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="phuongtien">Phương Tiện</label>
+                                <input type="text" class="form-control" id="phuongtien" th:field="*{phuongtien}">
+                                <label th:if="${#fields.hasErrors('phuongtien')}" th:errors="*{phuongtien}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="lichtrinh">Lịch Trình</label>
+                                <textarea class="form-control" id="lichtrinh" th:field="*{lichtrinh}"></textarea>
+                                <label th:if="${#fields.hasErrors('lichtrinh')}" th:errors="*{lichtrinh}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="soday">Số Ngày</label>
+                                <input type="number" class="form-control" id="soday" th:field="*{soday}">
+                                <label th:if="${#fields.hasErrors('soday')}" th:errors="*{soday}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="diadiem">Địa Điểm Khởi Hành</label>
+                                <input type="text" class="form-control" id="diadiem" th:field="*{diadiem}">
+                                <label th:if="${#fields.hasErrors('diadiem')}" th:errors="*{diadiem}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="soluongghe">Số Lượng Ghế</label>
+                                <input type="number" class="form-control" id="soluongghe" th:field="*{soluongghe}">
+                                <label th:if="${#fields.hasErrors('soluongghe')}" th:errors="*{soluongghe}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="uudai">Ưu đãi</label>
+                                <input type="number" class="form-control" id="uudai" th:field="*{uudai}">
+                                <label th:if="${#fields.hasErrors('uudai')}" th:errors="*{uudai}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="image">Ảnh Tour</label>
+                                <input type="file" class="form-control" id="image" th:field="*{image}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Thêm Tour</button>
+                    </form>
+                </div>
+            </div>
+            <footer th:replace="link/footer :: footer"></footer>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control {
+        border-radius: 20px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .btn-success {
+        border-radius: 20px;
+        padding: 10px 20px;
+    }
+</style>
+
+<script>
+    CKEDITOR.replace('lichtrinh');
+</script>
+
+</body>
+</html>

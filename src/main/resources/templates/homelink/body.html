@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Meta tags và các thẻ head khác -->
+    <style>
+        #confirmation-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ***** Preloader End ***** -->
+
+<div class="sub-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-8">
+                <ul class="info">
+                    <li><i class="fa fa-envelope"></i> daohongbon2k2@gmail.com</li>
+                    <li><i class="fa fa-map"></i> Tham quan, nghỉ dưỡng, khám phá.</li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <ul class="social-links">
+                    <li><a href="https://www.messenger.com/e2ee/t/7670383766422624/?locale=vi_VN"><i class="fab fa-facebook"></i></a></li>
+                    <li><a href="https://x.com/minthu" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
+                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="/home" class="logo">
+                        <h1>B.<span style="color: #1b8dbf">Travel</span></h1>
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav">
+                        <li><a href="/home" class="active">Trang chủ</a></li>
+                        <li><a href="/home/tour">Du lịch</a></li>
+                        <li><a href="/home/news">Tin tức</a></li>
+                        <li><a href="/home/introduce">Giới thiệu</a></li>
+                        <li th:if="${session.username != null}">
+                            <a><span th:text="'Xin chào: ' + ${session.username}"></span></a>
+                        </li>
+                        <li th:if="${session.username != null}">
+                            <a href="#" class="logout-link" style="margin-left: 10px"><i class="fa-solid fa-right-to-bracket"></i> Đăng xuất</a>
+                        </li>
+                        <li th:if="${session.username == null}">
+                            <a href="/home/login"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a>
+                        </li>
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Confirmation Dialog -->
+<div id="confirmation-dialog" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background-color: white; border: 1px solid #ccc; padding: 20px; border-radius: 5px; text-align: center;">
+    <p><strong>Bạn có muốn đăng xuất không?</strong></p>
+    <button type="button" id="logout-button" class="btn btn-primary">Đăng xuất</button>
+    <button type="button" id="cancel-button" class="btn btn-danger">Hủy</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('.logout-link').addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('confirmation-dialog').style.display = 'block';
+        });
+
+        document.getElementById('cancel-button').addEventListener('click', function () {
+            document.getElementById('confirmation-dialog').style.display = 'none';
+        });
+
+        document.getElementById('logout-button').addEventListener('click', function () {
+            window.location.href = '/home/logout';
+        });
+    });
+</script>
+
+
+<!-- Scripts -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/counter.js"></script>
+<script src="assets/js/custom.js"></script>
+
+
+</body>
+</html>

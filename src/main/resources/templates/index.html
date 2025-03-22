@@ -1,0 +1,129 @@
+controller
+package vn.tour_dulich.do_an.home.controller;
+
+import jakarta.mail.MessagingException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import vn.tour_dulich.do_an.Entity.BooktourEntity;
+import vn.tour_dulich.do_an.home.service.EmailService;
+import vn.tour_dulich.do_an.home.service.PayService;
+import org.springframework.http.ResponseEntity;
+
+@Controller
+public class GamilController {
+@Autowired
+private EmailService emailService;
+
+@Autowired
+private PayService payService;
+
+@PostMapping("/sendEmail")
+public String sendEmail(@RequestParam String gmail, Model model) {
+// Kiểm tra địa chỉ email có hợp lệ không
+if (!isValidEmail(gmail)) {
+model.addAttribute("message", "Địa chỉ email không hợp lệ. Vui lòng nhập lại.");
+return "home/gmail"; // Trả về mẫu HTML
+}
+
+try {
+BooktourEntity latestBooking = payService.getLatestBooking();
+
+model.addAttribute("pay", latestBooking);
+
+String subject = "Xác nhận đặt tour";
+String htmlContent = generateEmailContent(latestBooking);
+
+emailService.sendEmail(gmail, subject, htmlContent);  // Gửi email
+model.addAttribute("message", "Email đã được gửi thành công");
+
+} catch (Exception e) {
+model.addAttribute("message", "Có lỗi không xác định: " + e.getMessage());
+}
+
+return "home/gmail"; // Trả về mẫu HTML
+}
+
+private String generateEmailContent(BooktourEntity booking) {
+// Tạo nội dung HTML cho email
+StringBuilder content = new StringBuilder();
+content.append("<html><head>")
+    .append("<style>")
+    .append("body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; }")
+    .append(".container { max-width: 800px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; }")
+    .append("h1 { color: #d9534f; }")
+    .append("table { width: 100%; border-collapse: collapse; margin-top: 20px; }")
+    .append("th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }")
+    .append("th { background-color: #f2f2f2; }")
+    .append(".highlight { color: red; font-style: italic; }")
+    .append(".btn { display: inline-block; padding: 10px 20px; color: #fff; background-color: #d9534f; border: none; border-radius: 5px; cursor: pointer; margin-top: 20px; }")
+    .append(".btn:hover { background-color: #c9302c; }")
+    .append("</style>")
+    .append("</head><body>")
+.append("<div class='container'>")
+    .append("<h1>Cảm ơn bạn đã đặt tour!</h1>")
+    .append("<p>Khách Hàng: ").append(booking.getHoten()).append("</p>")
+    .append("<p>Ngày Đặt Hàng: ").append(booking.getNgaythanhtoan()).append("</p>")
+    .append("<p>Ngân Hàng: Ngân hàng TMCP Quân Đội/MB BANK</p>")
+    .append("<p>Số Tài Khoản: 1549122052002</p>")
+    .append("<p>Nội Dung Chuyển Khoản: ").append(booking.getId()).append("_")
+        .append(booking.getHoten()).append("_").append(booking.getSodienthoai()).append("</p>")
+    .append("<table><thead><tr><th>Tên Tour</th><th>Số Lượng</th><th>Thành tiền</th></tr></thead>")
+        .append("<tbody><tr>")
+            .append("<td>").append(booking.getTentour()).append("</td>")
+            .append("<td>").append(booking.getSoluong()).append("</td>")
+            .append("<td>").append(booking.getSotien()).append(" VNĐ</td>")
+            .append("</tr><tr><td colspan='2'><strong>Tổng Cộng</strong></td>")
+            .append("<td><strong>").append(booking.getSotien()).append(" VNĐ</strong></td>")
+            .append("</tr></tbody></table>")
+    .append("<p>Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất có thể.</p>")
+    .append("<p class='highlight'>! Lưu ý: Vui lòng ghi chính xác nội dung chuyển khoản. Sai thông tin, chúng tôi không chịu trách nhiệm.</p>")
+    .append("<p>Sau khi hoàn tất việc thanh toán, quý khách vui lòng vào bước xác nhận.</p>")
+    .append("<form action='/resendEmail' method='post'>")
+        .append("<input type='hidden' name='gmail' value='daohongbon2k2@gmail.com'>")
+        .append("<button type='submit' class='btn'>TÔI ĐÃ HOÀN THÀNH THANH TOÁN</button>")
+        .append("</form>")
+    .append("</div>")
+.append("</body></html>");
+return content.toString();
+}
+
+private boolean isValidEmail(String email) {
+String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+return email != null && email.matches(emailRegex);
+}
+}
+
+
+<!--package vn.tour_dulich.do_an.home.service;-->
+
+<!--import jakarta.mail.MessagingException;-->
+<!--import jakarta.mail.internet.MimeMessage;-->
+<!--import org.springframework.beans.factory.annotation.Autowired;-->
+<!--import org.springframework.mail.javamail.JavaMailSender;-->
+<!--import org.springframework.mail.javamail.MimeMessageHelper;-->
+<!--import org.springframework.stereotype.Service;-->
+
+<!--@Service-->
+<!--public class EmailService {-->
+
+<!--@Autowired-->
+<!--private JavaMailSender mailSender;-->
+
+<!--public void sendEmail(String to, String subject, String htmlContent) {-->
+<!--MimeMessage message = mailSender.createMimeMessage();-->
+
+<!--try {-->
+<!--MimeMessageHelper helper = new MimeMessageHelper(message, true);-->
+<!--helper.setTo(to); // Thiết lập địa chỉ email nhận-->
+<!--helper.setSubject(subject); // Thiết lập tiêu đề email-->
+<!--helper.setText(htmlContent, true); // true để gửi nội dung HTML-->
+
+<!--mailSender.send(message); // Gửi email-->
+<!--} catch (MessagingException e) {-->
+<!--throw new RuntimeException(e);-->
+<!--}-->
+<!--}-->
+<!--}-->

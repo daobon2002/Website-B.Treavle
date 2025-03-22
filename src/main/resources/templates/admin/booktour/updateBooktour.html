@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Sửa Thông Tin Đặt Lịch</title>
+  <head th:replace="link/head :: head"></head>
+</head>
+<body>
+<div class="container-scroller">
+  <nav th:replace="link/nav :: nav"></nav>
+  <div class="container-fluid page-body-wrapper">
+    <nav th:replace="link/nav1 :: nav"></nav>
+
+    <div class="main-panel">
+      <div class="content-wrapper pb-0">
+        <div class="container">
+          <h2>Sửa Thông Tin Đặt Lịch</h2>
+          <form th:action="@{/admin/booktour/update}" th:object="${booktour}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <div class="form-row">
+              <div class="form-group col-md-9">
+                <label for="hoten">Họ tên</label>
+                <input type="text" class="form-control input-custom" id="hoten" th:field="*{hoten}">
+                <label th:if="${#fields.hasErrors('hoten')}" th:errors="*{hoten}" class="text-danger"></label>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="gmail">Gmail</label>
+                <input type="email" class="form-control input-custom" id="gmail" th:field="*{gmail}">
+                <label th:if="${#fields.hasErrors('gmail')}" th:errors="*{gmail}" class="text-danger"></label>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="sodienthoai">Số điện thoại</label>
+                <input type="text" class="form-control input-custom" id="sodienthoai" th:field="*{sodienthoai}">
+                <label th:if="${#fields.hasErrors('sodienthoai')}" th:errors="*{sodienthoai}" class="text-danger"></label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-9">
+                <label for="soluong">Số lượng người</label>
+                <input type="number" class="form-control input-custom" id="soluong" th:field="*{soluong}">
+                <label th:if="${#fields.hasErrors('soluong')}" th:errors="*{soluong}" class="text-danger"></label>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-9">
+                <label for="tentour">Tên tour</label>
+                <input type="text" class="form-control input-custom" id="tentour" th:field="*{tentour}">
+                <label th:if="${#fields.hasErrors('tentour')}" th:errors="*{tentour}" class="text-danger"></label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-9">
+                <label for="sotien">Số tiền</label>
+                <input type="text" class="form-control input-custom" id="sotien" th:field="*{sotien}" >
+                <label th:if="${#fields.hasErrors('sotien')}" th:errors="*{sotien}" class="text-danger"></label>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="ngaythanhtoan">Ngày thanh toán</label>
+                <input type="text" class="form-control input-custom" id="ngaythanhtoan" th:field="*{ngaythanhtoan}" >
+                <label th:if="${#fields.hasErrors('ngaythanhtoan')}" th:errors="*{ngaythanhtoan}" class="text-danger"></label>
+              </div>
+              <div class="form-group col-md-9">
+                <label for="trangthai">Trạng thái</label>
+                <select class="form-control input-custom" id="trangthai" th:field="*{trangthai}">
+                  <option value="" disabled selected>Chọn trạng thái</option>
+                  <option value="Hoan Thanh">Hoan Thanh</option>
+                  <option value="Cho Xu Ly">Cho Xu Ly</option>
+                </select>
+                <label th:if="${#fields.hasErrors('trangthai')}" th:errors="*{trangthai}" class="text-danger"></label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Sửa Thông Tin</button>
+          </form>
+        </div>
+      </div>
+      <footer th:replace="link/footer :: footer"></footer>
+    </div>
+  </div>
+</div>
+
+<style>
+  .input-custom {
+    border-radius: 20px;
+    width: 100%;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+</style>
+
+</body>
+</html>

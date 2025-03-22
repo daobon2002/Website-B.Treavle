@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sửa Tin Tức</title>
+    <head th:replace="link/head :: head"></head>
+    <script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
+</head>
+<body>
+<div class="container-scroller">
+    <nav th:replace="link/nav :: nav"></nav>
+    <div class="container-fluid page-body-wrapper">
+        <nav th:replace="link/nav1 :: nav"></nav>
+        <div class="main-panel">
+            <div class="content-wrapper pb-0">
+                <div class="container">
+                    <h2>Sửa Tin Tức</h2>
+                    <form th:action="@{/admin/news/update}" th:object="${news}" method="post" enctype="multipart/form-data">
+                        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                        <div class="form-row">
+                            <input type="hidden" th:field="*{id}"/>
+                            <div class="form-group col-md-9">
+                                <label for="tieude">Tiêu Đề</label>
+                                <input type="text" class="form-control input-custom" id="tieude" th:field="*{tieude}" required>
+                                <label th:if="${#fields.hasErrors('tieude')}" th:errors="*{tieude}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="noidung">Nội Dung</label>
+                                <textarea class="form-control input-custom" id="noidung" th:field="*{noidung}" required></textarea>
+                                <label th:if="${#fields.hasErrors('noidung')}" th:errors="*{noidung}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="author">Tác Giả</label>
+                                <input type="text" class="form-control input-custom" id="author" th:field="*{author}" required>
+                                <label th:if="${#fields.hasErrors('author')}" th:errors="*{author}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="ngaydang">Ngày Xuất Bản</label>
+                                <input type="datetime-local" class="form-control input-custom" id="ngaydang" th:field="*{ngaydang}" required>
+                                <label th:if="${#fields.hasErrors('ngaydang')}" th:errors="*{ngaydang}" class="text-danger"></label>
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label for="image">Ảnh</label>
+                                <input type="file" class="form-control" id="image" th:field="*{image}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Cập Nhật Tin Tức</button>
+                    </form>
+                </div>
+            </div>
+            <footer th:replace="link/footer :: footer"></footer>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-custom {
+        border-radius: 20px;
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
+
+<script>
+    CKEDITOR.replace('noidung'); // Khởi tạo CKEditor cho trường nội dung
+</script>
+
+</body>
+</html>

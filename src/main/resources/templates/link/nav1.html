@@ -1,0 +1,109 @@
+<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown ms-3">
+                <a class="nav-link" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+                    <i style="font-size: 25px;" class="mdi mdi-bell-outline"></i>
+                    <span id="notification-badge" class="badge" style="display: none; position: absolute; top: 0; right: 0; background: red; color: white; border-radius: 50%; padding: 2px 5px; font-size: 12px;">1</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-left navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                    <h6 class="px-3 py-3 fw-semibold mb-0">Thông báo</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item preview-item" th:each="home:${Ck}">
+                        <div class="preview-thumbnail">
+                            <div class="preview-icon bg-success">
+                                <i class="mdi mdi-calendar"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                            <h6 class="preview-subject fw-normal mb-0">Nội dung chuyển khoản: <span id="transaction-content" th:text="${home.noidungchuyenkhoan}"></span></h6>
+                            <p class="text-gray ellipsis mb-0">Số tiền: <span id="transaction-amount" th:text="${home.sotienchuyenkhoan}+'VND'"></span></p>
+                            <p class="text-gray ellipsis mb-0">Thời gian: <span id="thoigian" th:text="${home.thoigian}"></span></p>
+                        </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <h6 class="p-3 font-13 mb-0 text-primary text-center">View all notifications</h6>
+                </div>
+            </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item nav-logout d-none d-md-block me">
+                <a class="nav-link" th:href="${session.username != null ? '/admin/logout' : '/admin/login'}" onclick="toggleLogin(event)">
+                    <button id="loginButton"
+                            th:data-logged-in="${session.username != null}"
+                            style="background:#0dcaf0; border: 1px solid #0dcaf0"
+                            class="btn btn-sm"
+                            th:classappend="${session.username != null ? 'btn-success' : 'btn-danger'}">
+                        <i class="fa-solid"
+                           th:classappend="${session.username != null ? 'fa-right-from-bracket' : 'fa-right-to-bracket'}">
+                        </i>
+                        <span th:text="${session.username != null ? 'Logout' : 'Login'}"></span>
+                    </button>
+                </a>
+            </li>
+        </ul>
+
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="mdi mdi-menu"></span>
+        </button>
+    </div>
+</nav>
+<script>
+    let notificationCount = 0; // Biến để theo dõi số lượng thông báo
+
+    // Hàm để cập nhật số lượng thông báo
+    function updateNotificationCount(newCount) {
+        notificationCount += newCount; // Tăng số lượng thông báo
+        const badge = document.getElementById('notification-badge');
+
+        // Hiện dấu thông báo và cập nhật số lượng
+        if (notificationCount > 0) {
+            badge.style.display = 'block'; // Hiện dấu thông báo
+            badge.innerText = notificationCount; // Cập nhật số lượng thông báo
+        } else {
+            badge.style.display = 'none'; // Ẩn dấu thông báo nếu không có thông báo
+        }
+    }
+
+    // Lắng nghe sự kiện nhấn nút "Xác nhận"
+    document.querySelectorAll('.confirm-button').forEach(button => {
+        button.addEventListener('click', function() {
+            // Ví dụ: giả sử có 1 thông báo mới mỗi lần nhấn nút
+            updateNotificationCount(1); // Cập nhật số lượng thông báo
+        });
+    });
+
+    // Ví dụ: Gọi hàm để cập nhật số lượng thông báo từ cơ sở dữ liệu
+    // Bạn có thể gọi hàm này khi nhận được thông báo mới từ server
+    function fetchNewNotifications() {
+        // Giả sử bạn nhận được 2 thông báo mới từ cơ sở dữ liệu
+        updateNotificationCount(2);
+    }
+
+    function toggleLogin(event) {
+        event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
+
+        const loginButton = document.getElementById("loginButton");
+
+        // Kiểm tra trạng thái người dùng: Đăng nhập hay chưa (giả định)
+        const isLoggedIn = loginButton.getAttribute("data-logged-in") === "true";
+
+        if (!isLoggedIn) {
+            // Đăng nhập thành công (ví dụ, gửi yêu cầu đến server tại đây)
+            // Chuyển nút sang trạng thái "Logout"
+            loginButton.setAttribute("data-logged-in", "true");
+            loginButton.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Logout';
+            loginButton.classList.remove("btn-danger");
+            loginButton.classList.add("btn-success");
+            loginButton.parentElement.setAttribute("href", "/admin/logout"); // Cập nhật liên kết thành "/logout"
+        } else {
+            // Đăng xuất
+            loginButton.setAttribute("data-logged-in", "false");
+            loginButton.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login';
+            loginButton.classList.remove("btn-success");
+            loginButton.classList.add("btn-danger");
+            loginButton.parentElement.setAttribute("href", "/admin/login"); // Trở lại trang login
+        }
+    }
+
+</script>

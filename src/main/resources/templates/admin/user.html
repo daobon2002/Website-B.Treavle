@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="link/head :: head"></head>
+<body>
+<div class="container-scroller">
+    <nav th:replace="link/nav :: nav"></nav>
+    <div class="container-fluid page-body-wrapper">
+        <nav th:replace="link/nav1 :: nav"></nav>
+        <div class="main-panel">
+            <div class="content-wrapper pb-0">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 25px">Thông Tin Người Dùng</h1>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <form class="d-flex">
+                                    <div class="search-box me-2"
+                                         style="flex-grow: 1; margin-right: 10px; max-width: 350px;">
+                                        <input type="text" id="searchInput" name="keyword" onkeyup="searchUsers()"
+                                               placeholder="Tìm kiếm..." th:value="${keyword}"
+                                               class="form-control"
+                                               style="border-radius: 20px; border: 2px solid #0a53be;">
+                                    </div>
+                                    <button type="submit" class="btn btn-outline-linkedin btn-search"
+                                            style="flex-grow: 0; margin-left: 10px; padding: 5px 10px; border-radius: 13px;">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </form>
+                                <button class="btn btn-success">
+                                    <a href="/admin/user/create" style="color: white; text-decoration: none;">Thêm Người Dùng</a>
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="userTable">
+                                    <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>UserId</th>
+                                        <th>Username</th>
+                                        <th>Fullname</th>
+                                        <th>Gender</th>
+                                        <th>Email</th>
+                                        <th>PhoneNumber</th>
+                                        <th>Address</th>
+                                        <th>Role</th>
+                                        <th>Hành Động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="user, stat : ${user}">
+                                        <td th:text="${stat.index + 1}"></td>
+                                        <td th:text="${user.id}"></td>
+                                        <td th:text="${user.username}"></td>
+                                        <td th:text="${user.fullname}"></td>
+                                        <td th:text="${user.gender}"></td>
+                                        <td th:text="${user.email}"></td>
+                                        <td th:text="${user.phonenumber}"></td>
+                                        <td th:text="${user.address}"></td>
+                                        <td th:text="${user.role}"></td>
+                                        <td class="text-center text-nowrap">
+                                            <a class="btn btn-behance me-2" th:href="@{/admin/user/update/{id}(id=${user.id})}" role="button">Sửa</a>
+                                            <form th:action="@{/admin/user/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
+                                                <input type="hidden" name="_method" value="DELETE" />
+                                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                                <button type="submit" class="btn btn-danger me-2" onclick="return confirm('Bạn có muốn xóa người dùng này không?');">
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li class="page-item" th:if="${currentPage > 1}">
+                            <a class="page-link" th:href="@{'?pageNumber=' + ${currentPage - 1}}">Trước</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1, totalPage)}" th:classappend="${currentPage == i ? 'active' : ''}" class="page-item">
+                            <a class="page-link" th:href="@{${keyword != null && keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'pageNumber=' + ${i}}" th:text="${i}"></a>
+                        </li>
+                        <li class="page-item" th:if="${currentPage < totalPage}">
+                            <a class="page-link" th:href="@{'?pageNumber=' + ${currentPage + 1}}">Sau</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <script>
+                    function loadPage(page) {
+                        fetch(`/admin/users/paginated?page=${page}&size=8`)
+                            .then(response => response.json())
+                            .then(data => {
+                                // Hiển thị dữ liệu từ API
+                            });
+                    }
+                </script>
+            </div>
+            <footer th:replace="link/footer :: footer"></footer>
+        </div>
+    </div>
+</div>
+</body>
+</html>

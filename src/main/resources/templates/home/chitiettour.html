@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="homelink/head.html :: head">
+    <style>
+        .pagination-wrapper {
+            margin: 20px 0; /* Khoảng cách trên và dưới */
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center; /* Căn giữa phân trang */
+        }
+
+        .page-item {
+            margin: 0 5px; /* Khoảng cách giữa các trang */
+        }
+
+        .page-link {
+            padding: 10px 15px; /* Padding cho các liên kết */
+            color: #007bff; /* Màu chữ */
+            background-color: #fff; /* Màu nền */
+            border: 1px solid #007bff; /* Đường viền */
+            border-radius: 5px; /* Bo góc */
+            transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển tiếp */
+        }
+
+        .page-link:hover {
+            background-color: #007bff; /* Màu nền khi hover */
+            color: #fff; /* Màu chữ khi hover */
+        }
+
+        .page-item.disabled .page-link {
+            color: #6c757d; /* Màu chữ cho liên kết không khả dụng */
+            background-color: #fff; /* Màu nền cho liên kết không khả dụng */
+            border: 1px solid #6c757d; /* Đường viền cho liên kết không khả dụng */
+        }
+
+        .page-item.active .page-link {
+            background-color: #007bff; /* Màu nền cho trang hiện tại */
+            color: #fff; /* Màu chữ cho trang hiện tại */
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="homelink/body.html:: body"></div>
+
+<div class="page-heading header-text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <span class="breadcrumb"><a href="/home">Trang chủ</a> <a
+                        href="/home/tour">/ Du lịch </a>/ Chi tiêt</span>
+                <h4 style="font-style:oblique;font-size: 50px ;color: white">Phiêu lưu, khám phá, thư giãn</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section style="margin-top: 50px" class="section-content padding-y">
+    <div class="container">
+        <div class="row">
+
+            <aside class="col-md-5 col-lg-6 mb-md-0 mb-4">
+                <div id="productImageCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <!--                    <div class="carousel-indicators">-->
+                    <!--                        <button type="button" data-bs-target="#productImageCarousel" data-bs-slide-to="0" class="active"-->
+                    <!--                                aria-current="true" aria-label="Slide 1"></button>-->
+                    <!--                        <button type="button" data-bs-target="#productImageCarousel" data-bs-slide-to="1"-->
+                    <!--                                aria-label="Slide 2"></button>-->
+                    <!--                        <button type="button" data-bs-target="#productImageCarousel" data-bs-slide-to="2"-->
+                    <!--                                aria-label="Slide 3"></button>-->
+                    <!--                    </div>-->
+                    <div class="carousel-inner" th:each="tour:${tour}">
+                        <div class="carousel-item active">
+                            <img th:src="@{'/static/image/'+${tour.image}}" th:alt="..."
+                                 style="width:100%; height: 100%; object-fit: cover; border-radius: 10%;">
+                        </div>
+                    </div>
+                    <!--                    <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel"-->
+                    <!--                            data-bs-slide="prev">-->
+                    <!--                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+                    <!--                        <span class="visually-hidden">Trước</span>-->
+                    <!--                    </button>-->
+                    <!--                    <button class="carousel-control-next" type="button" data-bs-target="#productImageCarousel"-->
+                    <!--                            data-bs-slide="next">-->
+                    <!--                        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+                    <!--                        <span class="visually-hidden">Sau</span>-->
+                    <!--                    </button>-->
+                </div>
+            </aside>
+
+            <main style="margin-left: 100px" class="col-md-6 col-lg-5" th:each="tour:${tour}">
+                <h2 class="title" th:text="${tour.tentour}"></h2>
+
+                <div class="rating-wrap">
+                    <span class="rating-stars me-2">
+                        <i class="bi bi-star-fill active"></i>
+                        <i class="bi bi-star-fill active"></i>
+                        <i class="bi bi-star-fill active"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </span>
+                </div>
+
+                <div class="mb-4">
+                    <span style="font-size: 30px;color: #fd7e14;font-weight: 600" class="price h4"
+                          th:text="${tour.gia}+' VND'"></span>
+                    <span style="font-size: 20px;color: red;font-weight: 600" class="ms-2"><i
+                            class="fa-solid fa-arrow-down" th:text="${' '+tour.uudai}+'%'"></i></span>
+                </div>
+
+                <dl class="row mb-4">
+                    <dt style="font-size: 18px" class="col-xl-4 col-sm-5 col-6">Ngày khởi hành:</dt>
+                    <dd style="font-size: 18px" class="col-xl-8 col-sm-7 col-6" th:text="${tour.ngaykhoihanh}"></dd>
+
+                    <dt style="font-size: 18px" class="col-xl-4 col-sm-5 col-6">Thời gian đi:</dt>
+                    <dd style="font-size: 18px" class="col-xl-8 col-sm-7 col-6">
+                        <span th:text="${tour.soday} + 'Ngày ' + (${tour.soday} - 1) + 'Đêm'"></span>
+                    </dd>
+
+                    <dt style="font-size: 18px" class="col-xl-4 col-sm-5 col-6">Địa điểm:</dt>
+                    <dd style="font-size: 18px" class="col-xl-8 col-sm-7 col-6" th:text="${tour.diadiem}">i</dd>
+
+                    <dt style="font-size: 18px" class="col-xl-4 col-sm-5 col-6">Phương tiện:</dt>
+                    <dd style="font-size: 18px" class="col-xl-8 col-sm-7 col-6">
+                        <span>
+                            <i th:if="${tour.phuongtien == 'Máy bay'}" class="fa-solid fa-plane"></i>
+                            <i th:if="${tour.phuongtien == 'Ô tô'}" class="fa-solid fa-car"></i>
+                            <i th:if="${tour.phuongtien == 'Tàu Hỏa'}" class="fa-solid fa-train"></i>
+                            <i th:if="${tour.phuongtien == 'Tàu thủy'}" class="fa-solid fa-ship"></i>
+                        </span>
+                    </dd>
+                </dl>
+
+                <div class="services">
+                    <style>
+                        .services {
+                            margin: 20px 0; /* Khoảng cách trên và dưới cho phần dịch vụ */
+                        }
+
+                        .service-list {
+                            list-style: none; /* Xóa dấu chấm */
+                            padding: 0; /* Xóa khoảng cách padding */
+                            margin: 0; /* Xóa khoảng cách margin */
+                            display: flex; /* Sử dụng Flexbox cho danh sách */
+                            flex-wrap: wrap; /* Cho phép xuống dòng */
+                        }
+
+                        .service-item {
+                            display: flex; /* Để có thể căn giữa icon và văn bản */
+                            align-items: center; /* Căn giữa theo chiều dọc */
+                            margin-bottom: 10px; /* Khoảng cách giữa các mục */
+                            flex-basis: 30%; /* Chiếm 30% chiều rộng để có 3 mục trên 1 dòng */
+                            margin-right: 10px; /* Khoảng cách giữa các mục ngang */
+                        }
+
+                        .service-item:last-child {
+                            margin-right: 0; /* Xóa khoảng cách cho mục cuối cùng */
+                        }
+
+                        @media (max-width: 768px) {
+                            .service-item {
+                                flex-basis: 100%; /* 1 mục trên 1 hàng cho màn hình nhỏ */
+                                margin-right: 0; /* Xóa khoảng cách cho các mục trên màn hình nhỏ */
+                            }
+                        }
+
+                        .main-button {
+                            text-align: center; /* Căn giữa nút */
+                            margin-top: 20px; /* Khoảng cách trên cho nút */
+                        }
+                    </style>
+                    <h5>Các dịch vụ kèm theo:</h5><br>
+                    <ul class="service-list">
+                        <li class="service-item">
+                            <i class="fa-solid fa-check"> </i> Bảo hiểm
+                        </li>
+                        <li class="service-item">
+                            <i class="fa-solid fa-ticket"></i> Vé tham quan
+                        </li>
+                        <li class="service-item">
+                            <i class="fa-solid fa-utensils"></i> Bữa ăn
+                        </li>
+                        <li class="service-item">
+                            <i class="fa-solid fa-bus"></i> Xe đưa đón
+                        </li>
+                        <li class="service-item">
+                            <i class="fa-solid fa-flag"></i> Hướng dẫn viên
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="main-button">
+                    <a th:href="@{/home/booking(tourid=${tour.id})}">Đặt ngay</a>
+                </div>
+            </main>
+        </div>
+    </div> <!-- container.// -->
+</section>
+
+
+<div th:each="tour:${tour}" class="accordion" id="accordionPanelsStayOpenExample"
+     style="max-width: 75%; margin: auto; margin-top: 20px">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+            <button style="font-size: 20px; font-weight: 600" class="accordion-button" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                    aria-controls="panelsStayOpen-collapseOne">
+                Mô tả Tour
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+             aria-labelledby="panelsStayOpen-headingOne">
+            <div class="accordion-body">
+                <p th:text="${tour.mota}">
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+            <button style="font-size: 20px; font-weight: 600" class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseTwo">
+                Lịch trình chuyến đi
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+             aria-labelledby="panelsStayOpen-headingTwo">
+            <div class="accordion-body">
+                <p th:utext="${tour.lichtrinh}">
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+            <button style="font-size: 20px; font-weight: 600" class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseThree">
+                Quy định
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+             aria-labelledby="panelsStayOpen-headingThree">
+            <div class="accordion-body">
+                <strong>Quy định chung:</strong>
+                <ul style="margin-left: 15px">
+                    <li>Du khách phải tuân thủ lịch trình và thời gian đã được sắp xếp trước.</li>
+                    <li>Hành lý cá nhân cần được bảo quản cẩn thận, tránh mất mát.</li>
+                    <li>Không mang theo các vật dụng cấm hoặc nguy hiểm.</li>
+                </ul>
+                <strong>Quy định về an toàn:</strong>
+                <ul style="margin-left: 15px">
+                    <li>Luôn tuân theo hướng dẫn của hướng dẫn viên du lịch.</li>
+                    <li>Giữ gìn trật tự và an toàn trong suốt chuyến đi.</li>
+                    <li>Không tự ý tách đoàn hoặc đi lạc hướng.</li>
+                </ul>
+                <strong>Quy định về vệ sinh môi trường:</strong>
+                <ul style="margin-left: 15px">
+                    <li>Không xả rác bừa bãi, giữ gìn vệ sinh chung.</li>
+                    <li>Bảo vệ và không gây hại đến môi trường tự nhiên.</li>
+                    <li>Tuân thủ các quy định về bảo vệ di sản và cảnh quan.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<section style="margin-top: 30px" class="section-content mb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 style="margin-bottom: 10px" class="pb-2">Đánh giá Tour</h3>
+                <div class="rattings-wrapper mb-5">
+                    <th:block th:each="review : ${reviews}">
+                        <div class="sin-rattings mb-4">
+                            <div class="star-author-all mb-2 clearfix">
+                                <div class="ratting-author float-start">
+                                    <h5 style="color: #087990" class="float-start me-3" th:text="${review.userid.username}">Tên người dùng</h5> <!-- Giả định bạn có thuộc tính username -->
+                                    <span th:text="${review.reviewdate}"></span>
+                                </div>
+                                <div class="ratting-star float-end">
+                                    <span class="rating-stars me-3">
+
+                                    </span>
+                                    <span  th:text="(${review.rating}+'sao')"></span>
+                                </div>
+                            </div>
+                            <p th:text="${review.binhluan}"></p>
+                            <hr>
+                        </div>
+                    </th:block>
+                    <!-- Phần phân trang -->
+                    <div class="pagination-wrapper">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/home/tour/tour_details(tourid=${tour.id}, page=${currentPage - 1})}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <th:block th:each="page : ${#numbers.sequence(1, totalPages)}">
+                                    <li class="page-item" th:classappend="${page == currentPage} ? 'active'">
+                                        <a class="page-link" th:href="@{/home/tour/tour_details(tourid=${tour.id}, page=${page})}" th:text="${page}"></a>
+                                    </li>
+                                </th:block>
+                                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                    <a class="page-link" th:href="@{/home/tour/tour_details(tourid=${tour.id}, page=${currentPage + 1} )}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                </div>
+                <h3 class="pb-2">Thêm đánh giá</h3>
+                <div class="ratting-form-wrapper">
+                    <div class="ratting-form">
+                        <form action="/home/tour/add_review" method="post">
+                            <input type="hidden" name="userid" th:value="${session.userId}"> <!-- Sử dụng userId -->
+                            <input type="hidden" name="tourid" th:value="${tour.id}">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <select class="form-select" name="rating">
+                                        <option disabled selected>Cho sao</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <textarea class="form-control" name="content" placeholder="Nội dung đánh giá" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                            <div>
+                                <th:block th:if="${param.error != null}">
+                                    <div class="alert alert-warning">Bạn cần đăng nhập để gửi đánh giá.</div>
+                                </th:block>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- col.// -->
+        </div> <!-- row.// -->
+    </div> <!-- container.//  -->
+</section> <!-- section-content.// -->
+<div class="properties section">
+    <div class="container">
+        <h3 class="pb-2">Bạn Có Thể Quan Tâm</h3>
+        <div class="row">
+            <div class="col-lg-4 col-md-6" th:each="tour : ${randomTours}">
+                <div class="item">
+                    <a th:href="@{/home/tour/tour_details(tour=${tour.id})}">
+                        <img th:src="@{'/static/image/'+${tour.image}}" th:alt="..."
+                             style="width:100%; height: 250px; object-fit: cover; border-radius: 10%;">
+                    </a>
+                    <figcaption class="info-wrap mt-2">
+                        <a style="color: black; font-size: 18px; font-weight: 600"
+                           th:href="@{/home/tour/tour_details(tourid=${tour.id})}" th:text="${tour.tentour}"></a>
+                        <div style="color:#fd7e14;" class="price mt-1 fw-bold" th:text="'Giá: '+${tour.gia}+' VND'">>
+                        </div>
+                    </figcaption>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<body th:replace="homelink/mess.html::body"></body>
+
+<footer th:replace="homelink/footer.html :: footer"></footer>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/isotope.min.js"></script>
+<script src="assets/js/owl-carousel.js"></script>
+<script src="assets/js/counter.js"></script>
+<script src="assets/js/custom.js"></script>
+
+</body>
+</html>
