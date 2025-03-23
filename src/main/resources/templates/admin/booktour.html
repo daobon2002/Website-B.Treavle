@@ -60,8 +60,8 @@
                                                     th:attr="data-id=${booktour.id}"
                                                     onchange="updateStatus(this)"
                                                     th:style="${booktour.trangthai == 'Hoan Thanh' ? 'color: #1ad790;' : 'color: #c0a16b;'}">
-                                                <option th:selected="${booktour.trangthai == 'Hoan Thanh'}">Hoan Thanh</option>
                                                 <option th:selected="${booktour.trangthai == 'Cho Xu Ly'}">Cho Xu Ly</option>
+                                                <option th:selected="${booktour.trangthai == 'Hoan Thanh'}">Hoan Thanh</option>
                                             </select>
                                         </td>
 

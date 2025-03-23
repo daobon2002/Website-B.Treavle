@@ -17,7 +17,7 @@ public class MailConfig {
         mailSender.setPort(587);
 
         mailSender.setUsername("bo5806501@gmail.com"); // Username từ file cấu hình
-        mailSender.setPassword("xvsx oipl uywc didq"); // Mật khẩu từ file cấu hình
+        mailSender.setPassword("kbko cthj qwcr lwvq"); // Mật khẩu từ file cấu hình
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

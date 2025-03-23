@@ -30,15 +30,15 @@ public class EmailService {
         System.out.println("Email đã được gửi thành công!");
     }
 
-    private String generateEmailContent( String to, String name, String tourName, String bookingDate, String sodienthoai, int soluong, String sotien) {
+    private String generateEmailContent(String to, String name, String tourName, String bookingDate, String sodienthoai, int soluong, String sotien) {
         // Create HTML content for the email
         StringBuilder content = new StringBuilder();
         content.append("<html><head>")
                 .append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n")
                 .append("<style>")
                 .append("body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; }")
-                .append(".container { max-width: 800px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: center; }")
-                .append("h1 { color: #d9534f;}")
+                .append(".container { max-width: 800px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); text-align: left; }")  // Căn trái cho nội dung trong container
+                .append("h1 { color: #d9534f; text-align: center; }") // Căn giữa tiêu đề
                 .append("table { width: 100%; border-collapse: collapse; margin-top: 20px; }")
                 .append("th, td { border: 1px solid #ccc; padding: 10px; text-align: left; font-family: Arial, sans-serif; }")
                 .append("th { background-color: #f2f2f2; }")
@@ -53,13 +53,13 @@ public class EmailService {
                 .append("<p>Ngày Đặt: ").append(bookingDate).append("</p>")
                 .append("<p>Ngân Hàng: Ngân Hàng TMCP Quân Đội/MB BANK</p>")
                 .append("<p>Số Tài Khoản: 1549122052002</p>")
-                .append("<p>Nội Dung Chuyển Khoản: </p>").append("<p>MB BANK</p>").append("_").append(name).append("_").append(sodienthoai).append("</p>")
+                .append("<p>Nội Dung Chuyển Khoản: <span>MB BANK</span> <span>_" + name + "_</span> <span>" + sodienthoai + "</span></p>")
                 .append("<table><thead><tr><th>Tên Tour</th><th>Số Lượng</th><th>Thành Tiền</th></tr></thead>")
                 .append("<tbody><tr>")
                 .append("<td>").append(tourName).append("</td>")
                 .append("<td>").append(soluong).append("</td>")
                 .append("<td>").append(sotien).append(" VND</td>")
-                .append("</tr><tr><td colspan='2'><strong> Tổng Tiền</strong></td>")
+                .append("</tr><tr><td colspan='2'><strong>Tổng Tiền:</strong></td>")
                 .append("<td><strong>").append(sotien).append(" VND</strong></td>")
                 .append("</tr></tbody></table>")
                 .append("<p>Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất có thể.</p>")
@@ -69,7 +69,6 @@ public class EmailService {
                 .append("</body></html>");
         return content.toString();
     }
-
 
 
     public void sendEmail1(String gmail, String hoten, String tourName, String bookingDate, String sodienthoai, int soluong, String sotien, String diadiem, String lichtrinh, String ngaykhoihanh, String tourNgaykhoihanh, String s, String mota, Integer soday, Integer soluongghe, String string) throws MessagingException {
@@ -138,7 +137,6 @@ public class EmailService {
                 + "    </tbody>"
                 + "</table>"
                 + "<div class=\"customer-info\">"
-                + "<p><strong>Lịch Trình Di Chuyển:</strong> " + lichtrinh + "</p>"
                 + "<p>Cảm ơn bạn đã đặt tour! Chúc các bạn có 1 chuyển đi vui vẻ bên gia đình và người thương.</p>"
                 + "</div>"
                 + "</div>"

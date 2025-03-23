@@ -65,6 +65,7 @@
                                     <input style="border-color: #2b3035; border-radius: 10px;"
                                            type="password" class="form-control form-control-lg"
                                            id="password" th:field="*{password}" placeholder="Mật khẩu" required>
+                                    <input type="checkbox" id="showPassword" onclick="togglePasswordVisibility('password')"> Hiển thị mật khẩu
                                     <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></label>
                                 </div>
                                 <div class="col-md-6">
@@ -72,9 +73,16 @@
                                     <input style="border-color: #2b3035; border-radius: 10px;"
                                            type="password" class="form-control form-control-lg"
                                            id="confirmPassword" th:field="*{confirmPassword}" placeholder="Xác nhận mật khẩu" required>
+                                    <input type="checkbox" id="showConfirmPassword" onclick="togglePasswordVisibility('confirmPassword')"> Hiển thị mật khẩu
                                     <label th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="text-danger"></label>
                                 </div>
                             </div>
+                            <script>
+                                function togglePasswordVisibility(inputId) {
+                                    var input = document.getElementById(inputId);
+                                    input.type = (input.type === 'password') ? 'text' : 'password';
+                                }
+                            </script>
                             <div class="g-recaptcha" data-sitekey="6LfEYN8qAAAAABZHD3otd1AlqFyXXYXU5LUKbBHC"></div> <!-- Thay thế YOUR_SITE_KEY_HERE bằng site key của bạn -->
                             <div class="mt-3 d-grid gap-2">
                                 <button class="btn btn-block btn-primary btn-lg fw-semibold auth-form-btn" type="submit">ĐĂNG KÝ</button>
